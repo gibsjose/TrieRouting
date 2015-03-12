@@ -46,27 +46,6 @@ private:
     std::string message;
 };
 
-class SocketException : public Exception {
-public:
-    SocketException(const std::string & message) : Exception() {
-        this->message = message;
-    }
-
-    ~SocketException() throw() {}
-
-    const char * what() const throw() {
-        std::string tmp;
-
-        tmp = "---> SocketException: " + message + ": errno: " + strerror(errno);
-
-        return tmp.c_str();
-    }
-
-private:
-    std::string message;
-};
-
-
 class FileIOException : public Exception {
 public:
     FileIOException(const std::string & filename, const std::string & message) : Exception() {
@@ -125,59 +104,6 @@ public:
 
 private:
     std::string filename;
-    std::string message;
-};
-
-class OutOfRangeException : public Exception {
-public:
-    OutOfRangeException(int bottom, int top, int val, const std::string & message) : Exception() {
-        this->bottom = bottom;
-        this->top = top;
-        this->val = val;
-        this->message = message;
-    }
-
-    OutOfRangeException(int top, int val, const std::string & message) : Exception() {
-        this->bottom = 0;
-        this->top = top;
-        this->val = val;
-        this->message = message;
-    }
-
-    ~OutOfRangeException() throw() {}
-
-    const char * what() const throw() {
-
-        std::ostringstream s;
-        s << "---> OutOfRangeException: Value: " << val << " outside of range: " << bottom << " <--> " << top << ": " << message;
-
-        return s.str().c_str();
-    }
-
-private:
-    int bottom;
-    int top;
-    int val;
-    std::string message;
-};
-
-class TTLExpiredException : public Exception {
-public:
-    TTLExpiredException(const std::string & message) : Exception() {
-        this->message = message;
-    }
-
-    ~TTLExpiredException() throw() {}
-
-    const char * what() const throw() {
-        std::string tmp;
-
-        tmp = "---> TTLExpiredException: " + message;
-
-        return tmp.c_str();
-    }
-
-private:
     std::string message;
 };
 

@@ -6,12 +6,12 @@ ODIR = obj
 LDIR = ../lib
 LIBS =
 
-BIN = DNSResolver
+BIN = Router
 
 _DEPS =
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = DNSResolver.o DNSPacket.o ConfigManager.o Record.o ExtendedRecord.o DNSCache.o
+_OBJ = Router.o Trie.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 all: setup $(BIN)
