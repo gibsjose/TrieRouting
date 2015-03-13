@@ -15,10 +15,14 @@ int main(int argc, char * argv[]) {
     Router router;
 
     router.Initialize(argc, argv);
+
     router.ParseRoutingTable();
     router.ParseLookup();
 
-    router.PrintLookup();
+    router.PrintRoutingTable();
+
+    router.BuildTrie();
+    router.Lookup();
 }
 
 void Router::Initialize(int argc, char ** argv) {
@@ -40,6 +44,7 @@ void Router::ParseRoutingTable(void) {
         std::vector<std::string> subList;
 
         RoutingTableEntry entry;
+        RoutingTableEntry prevEntry;
 
         std::string destination;
         unsigned int prefix;
@@ -47,18 +52,6 @@ void Router::ParseRoutingTable(void) {
         std::string nextHop;
 
         while(getline(routingTableFile, line)) {
-            // list = StringUtilities::SlitString(line, "|");
-            //
-            // //For each different entry, choose smallest list (arbitrarily decide ties)
-            // //For that list, store destination address, prefix length, and next hop address
-            // if(destination == prevDestination) {
-            //     if((size < prevSize) || !prevSize) {
-            //         entry.destination = destination;
-            //         entry.prefix = 0;
-            //         entry.nextHop = list.at(2);
-            //     }
-            // }
-
             list = StringUtilities::SplitString(line, "|");
 
             //Destination and Prefix
@@ -73,11 +66,22 @@ void Router::ParseRoutingTable(void) {
             //Next Hop
             nextHop = list.at(2);
 
+            entry.destination = destination;
+            entry.prefix = prefix;
+            entry.size = size;
+            entry.nextHop = nextHop;
+
             std::cout << "Destination = " << destination << std::endl;
             std::cout << "Prefix = " << prefix << std::endl;
             std::cout << "Size = " << size << std::endl;
             std::cout << "Next Hop = " << nextHop << std::endl;
             std::cout << std::endl;
+
+            if(prevEntry.Empty() || (entry < prevEntry)) {
+                routingTable[destination] = entry;
+            }
+
+            prevEntry = entry;
         }
 
         routingTableFile.close();
@@ -104,6 +108,14 @@ void Router::ParseLookup(void) {
     }
 }
 
+void Router::PrintRoutingTable(void) {
+    std::map<std::string, RoutingTableEntry>::iterator it;
+
+    for(it = routingTable.begin(); it != routingTable.end(); ++it) {
+        it->second.Print();
+    }
+}
+
 void Router::PrintLookup(void) {
     std::cout << "Lookup IPs" << std::endl;
     std::cout << "------------------------" << std::endl;
@@ -111,4 +123,12 @@ void Router::PrintLookup(void) {
         std::cout << lookup.at(i).address << std::endl;
     }
     std::cout << std::endl;
+}
+
+void Router::BuildTrie(void) {
+
+}
+
+void Router::Lookup(void) {
+
 }

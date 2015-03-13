@@ -1,0 +1,11 @@
+#!/bin/bash
+
+make clean
+make -j
+
+if [ $? -eq 0 ]
+then
+    sleep 1
+    clear
+    echo "Success"
+fi
