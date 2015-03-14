@@ -19,9 +19,6 @@ int main(int argc, char * argv[]) {
     router.ParseRoutingTable();
     router.ParseLookup();
 
-    router.PrintRoutingTable();
-
-    router.BuildTrie();
     router.Lookup();
 }
 
@@ -43,9 +40,6 @@ void Router::ParseRoutingTable(void) {
         std::vector<std::string> list;
         std::vector<std::string> subList;
 
-        RoutingTableEntry entry;
-        RoutingTableEntry prevEntry;
-
         std::string destination;
         unsigned int prefix;
         unsigned int size;
@@ -66,22 +60,7 @@ void Router::ParseRoutingTable(void) {
             //Next Hop
             nextHop = list.at(2);
 
-            entry.destination = destination;
-            entry.prefix = prefix;
-            entry.size = size;
-            entry.nextHop = nextHop;
-
-            std::cout << "Destination = " << destination << std::endl;
-            std::cout << "Prefix = " << prefix << std::endl;
-            std::cout << "Size = " << size << std::endl;
-            std::cout << "Next Hop = " << nextHop << std::endl;
-            std::cout << std::endl;
-
-            if(prevEntry.Empty() || (entry < prevEntry)) {
-                routingTable[destination] = entry;
-            }
-
-            prevEntry = entry;
+            trie.Insert(destination, prefix, size, nextHop);
         }
 
         routingTableFile.close();
@@ -95,11 +74,9 @@ void Router::ParseLookup(void) {
 
     if(lookupFile.is_open()) {
         std::string line;
-        LookupEntry entry;
 
         while(getline(lookupFile, line)) {
-            entry.address = line;
-            lookup.push_back(entry);
+            lookup.push_back(line);
         }
 
         lookupFile.close();
@@ -108,27 +85,17 @@ void Router::ParseLookup(void) {
     }
 }
 
-void Router::PrintRoutingTable(void) {
-    std::map<std::string, RoutingTableEntry>::iterator it;
-
-    for(it = routingTable.begin(); it != routingTable.end(); ++it) {
-        it->second.Print();
-    }
-}
-
 void Router::PrintLookup(void) {
     std::cout << "Lookup IPs" << std::endl;
     std::cout << "------------------------" << std::endl;
     for(int i = 0; i < lookup.size(); i++) {
-        std::cout << lookup.at(i).address << std::endl;
+        std::cout << lookup.at(i) << std::endl;
     }
     std::cout << std::endl;
 }
 
-void Router::BuildTrie(void) {
-
-}
-
 void Router::Lookup(void) {
-
+    for(int i = 0; i < lookup.size(); i++) {
+        std::cout << lookup.at(i) << " --> " << trie.Get(lookup.at(i)) << std::endl;
+    }
 }

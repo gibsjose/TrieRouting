@@ -225,7 +225,7 @@ public:
             //Skip if cell is empty
             if(!cell.empty()) {
                 try {
-                    double val = StringToNumber<double>(cell);
+                    StringToNumber<double>(cell);
                     dVector.push_back((double)atof(cell.c_str()));
                 } catch(const Exception &e) {
                     throw;
