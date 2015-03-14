@@ -15,10 +15,8 @@ int main(int argc, char * argv[]) {
     Router router;
 
     router.Initialize(argc, argv);
-
     router.ParseRoutingTable();
     router.ParseLookup();
-
     router.Lookup();
 }
 
@@ -60,9 +58,11 @@ void Router::ParseRoutingTable(void) {
             //Next Hop
             nextHop = list.at(2);
 
+            //Insert the entry in the trie
             trie.Insert(destination, prefix, size, nextHop);
         }
 
+        //Close the file
         routingTableFile.close();
     } else {
         throw FileIOException(routingTableFilename, "Unable to open file");
@@ -83,15 +83,6 @@ void Router::ParseLookup(void) {
     } else {
         throw FileIOException(lookupFilename, "Unable to open file");
     }
-}
-
-void Router::PrintLookup(void) {
-    std::cout << "Lookup IPs" << std::endl;
-    std::cout << "------------------------" << std::endl;
-    for(int i = 0; i < lookup.size(); i++) {
-        std::cout << lookup.at(i) << std::endl;
-    }
-    std::cout << std::endl;
 }
 
 void Router::Lookup(void) {

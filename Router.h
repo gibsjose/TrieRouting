@@ -15,7 +15,6 @@ public:
     void Initialize(int, char **);
     void ParseRoutingTable(void);
     void ParseLookup(void);
-    void PrintLookup(void);
     void Lookup(void);
 
 private:
