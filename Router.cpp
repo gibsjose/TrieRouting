@@ -87,6 +87,6 @@ void Router::ParseLookup(void) {
 
 void Router::Lookup(void) {
     for(int i = 0; i < lookup.size(); i++) {
-        std::cout << lookup.at(i) << " --> " << trie.Get(lookup.at(i)) << std::endl;
+        std::cout << lookup.at(i) << "\t" << trie.Get(lookup.at(i)) << std::endl;
     }
 }
