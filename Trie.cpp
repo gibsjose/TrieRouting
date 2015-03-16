@@ -103,7 +103,7 @@ std::string Trie::Get(std::string address) {
 
     uint32_t mask = 0x80000000;
 
-    std::string lastDataSeen = "Not Found";
+    std::string lastDataSeen = "NoMatch";
 
     for(int i = 0; i < 32; i++) {
         uint32_t bit = addr & mask;
